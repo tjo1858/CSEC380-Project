@@ -7,6 +7,6 @@ def test():
     s = BeautifulSoup(r.text, 'html.parser')
     print(s.title.string)
     assert s.title.string == 'Hello World!'
-    assert r.text.contains('Hello World!')
+    assert 'Hello World!' in r.text
 
 test()
