@@ -6,7 +6,7 @@ The URL for our project is: https://github.com/tjo1858/CSEC380-Project/.
 
 •	How did you breakup your projects and what are the security ramifications?
 
-We broke up our projects by each activity in the writeup. Breaking it up this way allows us to thoroughly test each section to ensure the security of the system is intact.
+We broke up our projects by each activity in the writeup. Breaking it up this way allows us to thoroughly test each section to ensure the security of the system is intact. We are also hashing our passwords before putting them into our database server which enhances security.
 
 •	How did you choose to break down your Epic into various issues (tasks)?
 
