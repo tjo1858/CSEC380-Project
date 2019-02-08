@@ -1,35 +1,36 @@
 Questions
-•	What is the URL of your Github project?
+
+**•	What is the URL of your Github project?**
 
 
 The URL for our project is: https://github.com/tjo1858/CSEC380-Project/.
 
 
-•	How did you breakup your projects and what are the security ramifications?
+**•	How did you breakup your projects and what are the security ramifications?**
 
 
 We broke up our projects by each activity in the writeup. By breaking it up by activity, it allows us to thoroughly test each section to ensure the security of the system is intact. 
 
 
-•	How did you choose to break down your Epic into various issues (tasks)?
+**•	How did you choose to break down your Epic into various issues (tasks)?**
 
 
 We chose to break down our epics into several issues for each task we had to complete in the section. Since we are currently unsure everything we will need in each section, we did our best to understand the requirements for each of our Epics and create issues based on them. We then assign these issues to the members of the group for collaboration.
 
 
-•	How long did you assign each sprint to be?
+**•	How long did you assign each sprint to be?**
 
 
 Each of our sprints is 2 weeks long. This puts us in good shape to finish the project one week early, also offering some flexibility for events like Spring Break and exam weeks.
 
 
-•	Did you deviate from the Agile methodology at all? If yes, what is your reasoning for this?
+**•	Did you deviate from the Agile methodology at all? If yes, what is your reasoning for this?**
 
 
 We did not deviate from the Agile methodology much at all. We used Github Projects as our Epics. We then assigned issues to these Epics as our tasks and used Github milestones to track our sprints so we finished everything on time. These issues are then assigned as tasks to the members of the team. As issues are completed, they are closed and if new features or ideas are thought of, they are added as old issues are closed.
 
 
-•	How do you ensure that after each issue/milestone that security has been verified? How would you identify such issues in an ideal environment?
+**•	How do you ensure that after each issue/milestone that security has been verified? How would you identify such issues in an ideal environment?**
 
 
 In depth testing will be done on each technological part of the project. These tests would help to find simple vulnerabilities. Then each member of the team has the role of verifying that each section is working and secure. Once this is verified by each member, the issue will is closed. In an ideal environment, there would be a devoted team that would do penetration testing against the created infrastructure to test its stability and find issues quicker. With more people, more roles can be divided and more testing can be done.
