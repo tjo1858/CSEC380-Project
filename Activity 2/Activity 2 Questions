@@ -2,5 +2,8 @@
 
 •	What Web Application security mechanisms are involved in your topology? What security mechanisms would ideally be involved?
 
+Some security mechanisms we have implemented in our topology are our database server that will be set to hash any passwords inputted so plaintext passwords are not saved. Ideally, a packet filter, antivirus, anda network intrusion detection and prevention system can help to enhance the security in our topology.
 
 •	What testing framework did you choose and why?
+
+We chose to use PyTest as our testing framework as we were all comfortable writing Python scripts and PyTest allows for easy and quick test script creation.
