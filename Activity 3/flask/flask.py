@@ -3,16 +3,16 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import os
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
-engine = create_engine('sqlite:///tutorial.db', echo=True)
+engine = create_engine('sqlite:///tutorial.db', echo=True) #this will be our SQL server
  
 app = Flask(__name__)
  
 @app.route('/')
 def home():
   if not session.get('logged_in'):
-		return render_template('login.html')
+		return render_template('login.html') #this page is ugly
 	else:
-		return "Hello Boss!  <a href="/logout">Logout</a>"
+		return "Hello Boss!  <a href="/logout">Logout</a>" #this should instead redirect to existing server
  
 @app.route('/login', methods=['POST'])
 def do_login():
@@ -30,11 +30,11 @@ def do_login():
 		flash('wrong password!')
 	return home()
  
-@app.route("/logout")
+@app.route("/logout") # a logout page may not be necessary
 def logout():
 	session['logged_in'] = False
 	return home()
  
 if __name__ == "__main__":
 	app.secret_key = os.urandom(12)
-	app.run(debug=True,host='0.0.0.0', port=4000)
+	app.run(debug=True,host='0.0.0.0', port=8081)
