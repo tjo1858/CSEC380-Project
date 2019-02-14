@@ -12,7 +12,7 @@ def home():
   if not session.get('logged_in'):
 		return render_template('login.html') #this page is ugly
 	else:
-		return "Hello Boss!  <a href="/logout">Logout</a>" #this should instead redirect to existing server
+		return redirect("http://localhost:8080", code=302)
  
 @app.route('/login', methods=['POST'])
 def do_login():
@@ -28,11 +28,6 @@ def do_login():
 		session['logged_in'] = True
 	else:
 		flash('wrong password!')
-	return home()
- 
-@app.route("/logout") # a logout page may not be necessary
-def logout():
-	session['logged_in'] = False
 	return home()
  
 if __name__ == "__main__":
