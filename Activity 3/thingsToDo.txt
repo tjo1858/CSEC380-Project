@@ -1,0 +1,3 @@
+1) Once the SQL server is up, finish the flask script.
+2) Once flask script is finished, modify travis.yml to run the flask script.
+3) Write the travis tests and give them unique names so we can tell them apart;
