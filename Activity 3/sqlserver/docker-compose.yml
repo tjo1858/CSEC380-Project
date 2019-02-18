@@ -1,0 +1,6 @@
+version: "3"
+services:
+  mysql:
+    build: ./sqlserver/
+    ports:
+      - "3306"
