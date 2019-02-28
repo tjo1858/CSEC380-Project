@@ -19,8 +19,13 @@ CREATE TABLE Video(
 	VideoURL VARCHAR(2000),
 	DateUploaded DATE
 	CONSTRAINT Video_pk PRIMARY KEY(VideoID),
-	CONSTRAINT Video_fk FOREIGN KEY userid_video_fk (UserID) 
+	CONSTRAINT Video_fk FOREIGN KEY (UserID) 
 		REFERENCES User(UserID)
 			ON DELETE CASCADE
 			ON UPDATE CASCADE
 );
+
+CREATE PROCEDURE adduser (IN Username varchar(64), IN EncryptedPass VARCHAR(64))
+BEGIN
+	INSERT INTO User(Username, EncryptedPass) values (Username, EncryptedPass);
+END

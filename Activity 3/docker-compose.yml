@@ -1,6 +1,13 @@
 version: "3"
 services:
+  webapp:
+    build: ./flask/
+    links:
+      - mysql
+    ports:
+      - "5000:5000"
+
   mysql:
     build: ./sqlserver/
     ports:
-      - "3306"
+      - "3306:3306"
