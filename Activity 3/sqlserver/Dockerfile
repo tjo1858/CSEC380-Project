@@ -4,6 +4,7 @@ ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_DATABASE=db
 ENV MYSQL_USER=admin
 ENV MYSQL_PASSWORD=root
+ENV MYSQL_DATABASE_HOST=127.0.0.1
 
 COPY database.sql /docker-entrypoint-initdb.d/database.sql
 

@@ -14,10 +14,10 @@ CREATE TABLE User(
 
 CREATE TABLE Video(
 	VideoID INTEGER NOT NULL AUTO_INCREMENT,
-	UserID VARCHAR(30),
+	UserID INTEGER NOT NULL,
 	VideoTitle VARCHAR(100),
 	VideoURL VARCHAR(2000),
-	DateUploaded DATE
+	DateUploaded DATE,
 	CONSTRAINT Video_pk PRIMARY KEY(VideoID),
 	CONSTRAINT Video_fk FOREIGN KEY (UserID) 
 		REFERENCES User(UserID)
@@ -25,7 +25,7 @@ CREATE TABLE Video(
 			ON UPDATE CASCADE
 );
 
-CREATE PROCEDURE adduser (IN Username varchar(64), IN EncryptedPass VARCHAR(64))
-BEGIN
-	INSERT INTO User(Username, EncryptedPass) values (Username, EncryptedPass);
-END
+#CREATE PROCEDURE adduser (IN Username varchar(64), IN EncryptedPass VARCHAR(64))
+#BEGIN
+#	INSERT INTO User(Username, EncryptedPass) values (Username, EncryptedPass);
+#END
