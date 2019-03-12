@@ -4,6 +4,8 @@ services:
     build: ./flask
     links:
       - mysql
+    depends_on:
+      - mysql
     ports:
       - "5000:5000"
 
@@ -18,4 +20,4 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: db
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+      - /var/lib/mysql

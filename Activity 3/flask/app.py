@@ -2,7 +2,8 @@ from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
-from datetime import date
+import datetime
+import sys
 
 app = Flask(__name__, template_folder='templates')
 
@@ -17,20 +18,26 @@ def login():
     hashedpass = generate_password_hash(password)
     conn = pymysql.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
-    cursor.execute("SELECT EncryptedPass FROM users WHERE Username={}".format(username))
+    cursor.execute("SELECT EncryptedPass FROM users WHERE Username='{}'".format(str(username)))
     userpass = cursor.fetchone()
-    if userpass == 0:
+    print(userpass, file=sys.stderr)
+    print(password, file=sys.stderr)
+    print(hashedpass, file=sys.stderr)
+    
+    if userpass == None:
         cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
-                ({}, {}, {})".format(username, hashedpass, datetime.date()))
+                ('{}', '{}', '{}')".format(username, hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
         cursor.close()
+        conn.commit()
         conn.close()
         return render_template('login.html')
-    if check_password_hash(hashedpass, userpass):
+    elif check_password_hash(userpass[0], password):
         cursor.close()
         conn.close()
         return 'success!'
 
     cursor.close()
+    conn.commit()
     conn.close()
     return "unsuccessful!"
 
