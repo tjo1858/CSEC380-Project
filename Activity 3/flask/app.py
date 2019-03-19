@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
 import datetime
 import sys
+import os
 
 app = Flask(__name__, template_folder='templates')
 
@@ -33,6 +34,7 @@ def login():
     elif check_password_hash(userpass[0], password):
         cursor.close()
         conn.close()
+        session['username'] = username
         return 'success!'
 
     cursor.close()
