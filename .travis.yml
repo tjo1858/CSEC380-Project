@@ -7,7 +7,7 @@ services:
 
 before_install:
 - docker-compose -f ./Activity\ 3/docker-compose.yml down
-- docker-compose -f ./Activity\ 3/docker-compose.yml up --build -d
+- docker-compose -f ./Activity\ 3/docker-compose.yml up -d
 
 script:
   - pytest test.py
