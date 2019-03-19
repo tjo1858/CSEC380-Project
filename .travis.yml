@@ -4,7 +4,10 @@ python:
   - "3.6"
 services:
   - docker
+sudo: required
 
+before_script:
+  - sudo /etc/init.d/mysql stop
 before_install:
 - docker-compose -f ./Activity\ 3/docker-compose.yml down
 - docker-compose -f ./Activity\ 3/docker-compose.yml up --build -d
