@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
 import datetime
@@ -27,8 +27,9 @@ def login():
     print(hashedpass, file=sys.stderr)
     
     if userpass == None:
-        cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
-                ('{}', '{}', '{}')".format(username, hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
+        #cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
+                #('{}', '{}', '{}')".format(username, hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
+        return('wrong username')
         cursor.close()
         conn.commit()
         conn.close()
@@ -37,12 +38,20 @@ def login():
         cursor.close()
         conn.close()
         session['username'] = username
-        return 'success!'
+        #return 'success!'
+        return redirect(url_for('mainpage'))
 
     cursor.close()
     conn.commit()
     conn.close()
-    return "unsuccessful!"
+    return "wrong password!"
+
+@app.route("/homepage", methods=['GET','POST'])
+def mainpage():
+    if 'username' in session:
+        return render_template('homepage.html')
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
