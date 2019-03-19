@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from flaskext.mysql import MySQL
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
 import datetime
