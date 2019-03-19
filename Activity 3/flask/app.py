@@ -6,6 +6,8 @@ import sys
 import os
 
 app = Flask(__name__, template_folder='templates')
+secretKey = os.urandom(24)
+app.secret_key = secretKey
 
 @app.route("/")
 def home():
