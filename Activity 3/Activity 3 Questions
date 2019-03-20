@@ -1,12 +1,12 @@
 •	Provide a link to the test cases you generated for this activity.
 •	How do you ensure that users that navigate to the protected pages cannot bypass authentication requirements?
 •	How do you protect against session fixation?
-    Session fixation can be protected against by generating a unique unpredictable session id for each user when the log in and
-    making said session id expire as soon as they close the page / log out. 
+Session fixation can be protected against by generating a unique unpredictable session id for each user when the log in and
+making said session id expire as soon as they close the page / log out. 
 •	How do you ensure that if your database gets stolen passwords aren’t exposed?
 •	How do you prevent password brute force?
 •	How do you prevent username enumeration?
-    Username enumeration can be prevented by not serving a specific message when a client enters an incorrect username and password.
-    When a username is entered incorrectly, instead of responding with something like "incorrect username", respond with something like,
-    "incorrect username and/or password." This will prevent enumeration of any usernames.
+Username enumeration can be prevented by not serving a specific message when a client enters an incorrect username and password.
+When a username is entered incorrectly, instead of responding with something like "incorrect username", respond with something like,
+"incorrect username and/or password." This will prevent enumeration of any usernames.
 •	What happens if your sessionID is predictable, how do you prevent that?
