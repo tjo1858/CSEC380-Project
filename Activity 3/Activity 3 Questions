@@ -1,12 +1,34 @@
 •	Provide a link to the test cases you generated for this activity.
+
 •	How do you ensure that users that navigate to the protected pages cannot bypass authentication requirements?
+  
+  We ensure that users cannot navigate to protected pages by creating a new session everytime a user logins in. This limits other people
+  from accessing pages that are locked behind our authentication. These session IDs are long and difficult to guess, making bypassing the 
+  authentication requirements much more difficult.
+  
 •	How do you protect against session fixation?
-Session fixation can be protected against by generating a unique unpredictable session id for each user when the log in and
-making said session id expire as soon as they close the page / log out. 
+
+  Session fixation can be protected against by generating a unique unpredictable session id for each user when the log in and
+  making said session id expire as soon as they close the page / log out. 
+  
 •	How do you ensure that if your database gets stolen passwords aren’t exposed?
+
+  We take a salted hash of the passwords using the Werkzeug library in Python in our database. We then hash the inputted password
+  from the user and check the hash against the salted hash stored in the database. This prevents a user from using a hash as a password
+  and prevents a user from having a plain text password if the SQL database was ever leaked.
+  
 •	How do you prevent password brute force?
+
+  i wanna implement this https://flask-limiter.readthedocs.io/en/latest/
+  
 •	How do you prevent username enumeration?
-Username enumeration can be prevented by not serving a specific message when a client enters an incorrect username and password.
-When a username is entered incorrectly, instead of responding with something like "incorrect username", respond with something like,
-"incorrect username and/or password." This will prevent enumeration of any usernames.
+
+  Username enumeration can be prevented by not serving a specific message when a client enters an incorrect username and password.
+  When a username is entered incorrectly, instead of responding with something like "incorrect username", respond with something like,
+  "incorrect username and/or password." This will prevent enumeration of any usernames.
+
 •	What happens if your sessionID is predictable, how do you prevent that?
+  
+  If the session ID was predictable, which ours is not as stated in a previous question, you could manually set the session ID to be a
+  series of cryptographically secure random bytes. This would make the session ID less predictable and more secure, stopping session fixation. 
+  
