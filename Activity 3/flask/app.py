@@ -15,11 +15,15 @@ def home():
 
 @app.route("/login", methods=['POST'])
 def login():
+    testuser1 = 'admin'
+    testuser1hashedpass = generate_password_hash('admin')
     username = request.form['username']
     password = request.form['password']
     hashedpass = generate_password_hash(password)
     conn = pymysql.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
+    cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
+            ('{}', '{}', '{}')".format(testuser1, testuser1hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
     cursor.execute("SELECT EncryptedPass FROM users WHERE Username='{}'".format(str(username)))
     userpass = cursor.fetchone()
     print(userpass, file=sys.stderr)
