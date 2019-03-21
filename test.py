@@ -6,7 +6,7 @@ import cgi
 
 
 
-def Act3test():
+def test_act3():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://127.0.0.1:5000/login', data=data)
     print ('TEST1 - correct login : admin:admin')
@@ -31,4 +31,4 @@ def Act2test():
     print(s.title.string)
     assert 'Hello World!' in r.text
 
-Act3test()
+test_act3()
