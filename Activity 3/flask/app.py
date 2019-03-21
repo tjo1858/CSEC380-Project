@@ -35,7 +35,7 @@ def login():
     if userpass == None:
         #cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
                 #('{}', '{}', '{}')".format(username, hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
-        return('wrong username')
+        return render_template('wronguser.html')
         cursor.close()
         conn.commit()
         conn.close()
@@ -50,7 +50,7 @@ def login():
     cursor.close()
     conn.commit()
     conn.close()
-    return "wrong password!"
+    return render_template('wrongpass.html')
 
 @app.route("/homepage", methods=['GET','POST'])
 def mainpage():
