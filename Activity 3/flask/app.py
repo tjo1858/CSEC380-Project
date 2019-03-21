@@ -13,8 +13,10 @@ app.secret_key = secretKey
 def home():
     return render_template('login.html')
 
-@app.route("/login", methods=['POST'])
+@app.route("/login", methods=['GET','POST'])
 def login():
+    if request.method == 'GET':
+        return redirect("http://127.0.0.1:5000/")
     testuser1 = 'admin'
     testuser1hashedpass = generate_password_hash('admin')
     username = request.form['username']
