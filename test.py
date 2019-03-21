@@ -15,12 +15,12 @@ def Act3test():
     data = {'username': 'admin', 'password': 'admin1'}
     r = requests.post('http://127.0.0.1:5000/login', data=data)
     print ('TEST2 - incorrect password : admin:admin1')
-    assert 'wrong password' in r.content.decode('UTF-8')
+    assert 'You inputted the wrong password' in r.content.decode('UTF-8')
     
     data = {'username': 'admin1', 'password': 'admin'}
     r = requests.post('http://127.0.0.1:5000/login', data=data)
     print ('TEST3 - incorrect username : admin1:admin')
-    assert 'wrong username' in r.content.decode('UTF-8')
+    assert 'That username does not exist.' in r.content.decode('UTF-8')
 
 
 
