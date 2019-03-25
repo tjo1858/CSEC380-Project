@@ -1,11 +1,18 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import datetime
 import sys
 import os
 
 app = Flask(__name__, template_folder='templates')
+limiter = Limiter (
+    app,
+    key_func=get_remote_address,
+    default_limits=["28000 per day", "1000 per hour", "20 per minute"]
+)
 secretKey = os.urandom(24)
 app.secret_key = secretKey
 
@@ -14,6 +21,7 @@ def home():
     return render_template('login.html')
 
 @app.route("/login", methods=['GET','POST'])
+@limiter.limit("14400/day;600/hour;10/minute")
 def login():
     if request.method == 'GET':
         return redirect("http://127.0.0.1:5000/")
@@ -33,23 +41,26 @@ def login():
     print(hashedpass, file=sys.stderr)
     
     if userpass == None:
-        #cursor.execute("INSERT INTO users(Username, EncryptedPass, DateCreated) VALUES \
-                #('{}', '{}', '{}')".format(username, hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
-        return render_template('wronguser.html')
         cursor.close()
         conn.commit()
         conn.close()
-        return render_template('login.html')
+        return render_template('wronguser.html')
     elif check_password_hash(userpass[0], password):
         cursor.close()
         conn.close()
         session['username'] = username
-        #return 'success!'
         return redirect(url_for('mainpage'))
-
     cursor.close()
     conn.commit()
     conn.close()
+    return redirect(url_for('wrongpass'))
+
+@app.route("/wronguser", methods=['GET','POST'])
+def wronguser():
+    return render_template('wronguser.html')
+
+@app.route("/wrongpass", methods=['GET','POST'])
+def wrongpass():
     return render_template('wrongpass.html')
 
 @app.route("/homepage", methods=['GET','POST'])
