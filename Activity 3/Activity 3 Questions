@@ -6,7 +6,7 @@ We ensure that users cannot navigate to protected pages by creating a new sessio
   
 •	How do you protect against session fixation?
 
-Session fixation can be protected against by generating a unique unpredictable session ID for each user when they log in. We also make these session IDs expire as soon as they close the page and/orlog out, thus ensuring that it is not possible to hijack an active session since a single session ID cannot be used twice. In other words, even if an attacker were to determine the session ID being used, it would be of no use since the session ID would be considered invalid.
+Session fixation can be protected against by generating a unique unpredictable session ID for each user when they log in. We also make these session IDs expire as soon as they close the page and/orlog out, thus ensuring that it is not possible to hijack an active session since a single session ID cannot be used twice. In other words, even if an attacker were to determine the session ID being used, it would be of no use since the session ID when used again would be considered invalid.
   
 •	How do you ensure that if your database gets stolen passwords aren’t exposed?
 
@@ -14,7 +14,7 @@ We take a salted hash of the passwords using the Werkzeug library in Python in o
   
 •	How do you prevent password brute force?
 
-I wanna implement this https://flask-limiter.readthedocs.io/en/latest/
+We implemented rate-limiting on our website to ensure that passwords cannot be brute forced. The way this is set up is that we are only allowing 10 requests a minute to our login page from a specific source. This prevents an attacker from implementing a brute force attack.
   
 •	How do you prevent username enumeration?
 
