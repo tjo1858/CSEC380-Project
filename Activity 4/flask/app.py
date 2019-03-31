@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, flash, render_template, request, session, redirect, url_for
 import pymysql
 from werkzeug import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -8,12 +8,10 @@ import datetime
 import sys
 import os
 
-APP_ROOT = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = 'videos'
-ALLOWED_EXTENSIONS = set(['mp4'])
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, template_folder='templates')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 limiter = Limiter (
     app,
     key_func=get_remote_address,
@@ -42,9 +40,6 @@ def login():
             ('{}', '{}', '{}')".format(testuser1, testuser1hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
     cursor.execute("SELECT EncryptedPass FROM users WHERE Username='{}'".format(str(username)))
     userpass = cursor.fetchone()
-    print(userpass, file=sys.stderr)
-    print(password, file=sys.stderr)
-    print(hashedpass, file=sys.stderr)
     
     if userpass == None:
         cursor.close()
@@ -73,20 +68,17 @@ def wrongpass():
 def homepage():
 	if 'username' in session:
 		if request.method == 'POST':
-        # check if the post request has the file part
-			if 'file' not in request.files:
-				flash('No file part')
-				return redirect(request.url)
-			f = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-			if f.filename == '':
-				flash('No selected file')
-				return redirect(request.url)
-			if f:
-				filename = secure_filename(f.filename)
-				print(filename, file=sys.stderr)
-			f.save(os.path.join(APP_ROOT, app.config['UPLOAD_FOLDER'], filename))
+
+                    for f in request.files.getlist("file"):
+                        target = os.path.join(APP_ROOT, "videos")
+                        filename = f.filename
+                        if not filename.endswith(".mp4"):
+                            print("hi", file=sys.stderr)
+                            flash("Please upload a file with .mp4 extension.")
+                            return render_template('homepage.html')
+                        destination = "/".join([target, filename])
+                        f.save(destination)
+
 		return render_template('homepage.html')
 	else:
 		return redirect(url_for('login'))
