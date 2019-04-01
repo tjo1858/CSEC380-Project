@@ -73,12 +73,23 @@ def homepage():
                         target = os.path.join(APP_ROOT, "videos")
                         filename = f.filename
                         if not filename.endswith(".mp4"):
-                            print("hi", file=sys.stderr)
                             flash("Please upload a file with .mp4 extension.")
                             return render_template('homepage.html')
                         destination = "/".join([target, filename])
                         f.save(destination)
-
+                        
+                        conn = pymysql.connect('mysql', 'root', 'root', 'db')
+                        cursor = conn.cursor()
+                        
+                        cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
+                        userid = cursor.fetchone()
+                        cursor.execute("INSERT INTO video(UserID, VideoTitle, DateUploaded) VALUES \
+                        ('{}', '{}', '{}')".format(userid, filename, \
+                        datetime.datetime.now().strftime('%Y-%m-%d')))
+                        cursor.execute("UPDATE 'users' SET 'TotalVideoCount' = 'TotalVideoCount' + 1 WHERE 'Username' = {}".format(str(session['username'])))
+                        cursor.close()
+                        conn.commit()
+                        conn.close()
 		return render_template('homepage.html')
 	else:
 		return redirect(url_for('login'))
