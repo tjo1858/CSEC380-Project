@@ -2,18 +2,57 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+table, th, td {
+  border: 0px;
+  }
+</style>
+
 <title>RITube Video System</title>
-<h1>RITube Video System</h1>
+<h1>Welcome to RITube Video System {{ username }}</h1>
     <form method=post enctype=multipart/form-data>
 	    <p>Upload from Computer or Upload from Link</p>
 	    Upload from Computer:<input type=file name=file><br>
-	    Upload from Link:<input type="text" name="linkupload"><br>
+	    Upload from Link: <input type="text" name="linkupload"><br>
 	    <input type=submit value=Upload>
 </head>
-
+	
 <body>
 
+
+<script type=text/javascript>
+$(document).ready(function(){
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:5000/getvideos",
+	contentType: "application/json",
+        dataType: 'json',
+	data: JSON.stringify({username: "{{ username }}"}),
+        success: function(data) {
+            console.log("This is the returned data: " + JSON.stringify(data));
+        },
+        error: function(error){
+            console.log("Here is the error res: " + JSON.stringify(error));
+        }
+    });
+});
+</script>
 </body>
 
-</html>
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+  <tr>
+    <td>Name of Video</td>
+    <td>
+      			<form name="delete" action="javascript:select();" >
+                <input id="edit" type="submit" name="edit" value="Edit" />
+                </form>
+    </td>
+  
+  </tr>
+</table>
 
+</html>

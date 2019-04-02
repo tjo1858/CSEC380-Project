@@ -2,3 +2,4 @@ flask
 pymysql
 flask_limiter
 requests
+flask-cors

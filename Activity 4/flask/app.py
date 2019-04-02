@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session, redirect, url_for
+from flask import Flask, flash, jsonify, render_template, request, session, redirect, url_for
 import pymysql
 import requests
 import shutil
@@ -9,6 +9,7 @@ from flask_limiter.util import get_remote_address
 import datetime
 import sys
 import os
+from flask_cors import CORS, cross_origin
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 os.makedirs("videos", exist_ok=True)
@@ -22,6 +23,10 @@ limiter = Limiter (
 )
 secretKey = os.urandom(24)
 app.secret_key = secretKey
+
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+cors = CORS(app)
 
 @app.route("/")
 def home():
@@ -105,9 +110,22 @@ def homepage():
                 cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
                     1 WHERE Username = '{}'".format(str(session['username'])))
                 conn.commit()
-        return render_template('homepage.html')
+        return render_template('homepage.html', username = session['username'])
     else:
         return redirect(url_for('login'))
+
+@app.route('/getvideos', methods=['GET', 'POST'])
+def getvideos():
+    username = request.get_json()
+    username = username['username']
+    print(username, file=sys.stderr)
+    cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format(username))
+    userid = cursor.fetchone()
+    print(userid, file=sys.stderr)
+    cursor.execute("SELECT * FROM video WHERE UserID={}".format(userid[0]))
+    print("hi", file=sys.stderr)
+    print(jsonify(cursor.fetchone()), file=sys.stderr)
+    return jsonify(cursor.fetchall())
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
