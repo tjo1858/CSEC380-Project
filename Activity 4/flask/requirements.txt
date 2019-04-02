@@ -1,3 +1,4 @@
 flask
 pymysql
 flask_limiter
+requests
