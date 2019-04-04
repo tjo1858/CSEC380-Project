@@ -2,6 +2,7 @@ from flask import Flask, flash, jsonify, render_template, request, session, redi
 import pymysql
 import requests
 import shutil
+import json
 from werkzeug import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_limiter import Limiter
@@ -69,7 +70,7 @@ def wrongpass():
 def homepage():
     if 'username' in session:
         if request.method == 'POST':
-            target = os.path.join(APP_ROOT, "videos")
+            target = os.path.join(APP_ROOT, "static")
 
             link = request.form['linkupload']
             if link != '':
@@ -103,10 +104,9 @@ def homepage():
                 f.save(destination)
                 cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
                 userid = cursor.fetchone()
-                print(userid, file=sys.stderr)
-                cursor.execute("INSERT INTO video(UserID, VideoTitle, DateUploaded) VALUES \
-                    ('{}', '{}', '{}')".format(userid[0], filename, \
-                    datetime.datetime.now().strftime('%Y-%m-%d')))
+                cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoURL, DateUploaded) VALUES \
+                    ('{}', '{}', '{}', '{}')".format(userid[0], filename, \
+                    str(destination), datetime.datetime.now().strftime('%Y-%m-%d')))
                 cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
                     1 WHERE Username = '{}'".format(str(session['username'])))
                 conn.commit()
@@ -118,14 +118,20 @@ def homepage():
 def getvideos():
     username = request.get_json()
     username = username['username']
-    print(username, file=sys.stderr)
     cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format(username))
     userid = cursor.fetchone()
-    print(userid, file=sys.stderr)
     cursor.execute("SELECT * FROM video WHERE UserID={}".format(userid[0]))
-    print("hi", file=sys.stderr)
-    print(jsonify(cursor.fetchone()), file=sys.stderr)
-    return jsonify(cursor.fetchall())
+    rows = cursor.fetchall()
+    row_headers=[x[0] for x in cursor.description]
+    json_data=[]
+    for result in rows:
+        json_data.append(dict(zip(row_headers,result)))
+    print(json_data, file=sys.stderr)
+    return jsonify(json_data)
+
+@app.route('/videos/<title>')
+def videos(title):
+    return app.send_static_file(title)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
