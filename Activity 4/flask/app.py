@@ -13,38 +13,54 @@ import os
 from flask_cors import CORS, cross_origin
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-os.makedirs("videos", exist_ok=True)
-app = Flask(__name__, template_folder='templates')
+
+app = Flask(__name__, static_url_path='/static', template_folder='templates')
+
+# sql connect
+
 conn = pymysql.connect('mysql', 'root', 'root', 'db')
 cursor = conn.cursor()
+
+# rate limit for password brute force
+
 limiter = Limiter (
     app,
     key_func=get_remote_address,
     default_limits=["28000 per day", "1000 per hour", "20 per minute"]
 )
+
+# creating session key
+
 secretKey = os.urandom(24)
 app.secret_key = secretKey
+
+
+# configure CORS
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 cors = CORS(app)
 
+
 @app.route("/")
 def home():
     return render_template('login.html')
 
+
 @app.route("/login", methods=['GET','POST'])
 @limiter.limit("14400/day;600/hour;10/minute")
 def login():
+
     if request.method == 'GET':
-        return redirect("http://127.0.0.1:5000/")
+        return redirect('http://localhost:5000')
     testuser1 = 'admin'
     testuser1hashedpass = generate_password_hash('admin')
     username = request.form['username']
     password = request.form['password']
     hashedpass = generate_password_hash(password)
-    cursor.execute("INSERT INTO users(Username, EncryptedPass, TotalVideoCount, DateCreated) VALUES \
-	('{}', '{}', 0, '{}')".format(testuser1, testuser1hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
+    cursor.execute("INSERT INTO users(Username, EncryptedPass, TotalVideoCount, \
+                    DateCreated) VALUES ('{}', '{}', 0, '{}')".format(testuser1, \
+                    testuser1hashedpass, datetime.datetime.now().strftime('%Y-%m-%d')))
     cursor.execute("SELECT EncryptedPass FROM users WHERE Username='{}'".format(str(username)))
     userpass = cursor.fetchone()
 	
@@ -58,16 +74,22 @@ def login():
     conn.commit()
     return redirect(url_for('wrongpass'))
 
+
 @app.route("/wronguser", methods=['GET','POST'])
 def wronguser():
+
     return render_template('wronguser.html')
+
 
 @app.route("/wrongpass", methods=['GET','POST'])
 def wrongpass():
+
     return render_template('wrongpass.html')
+
 
 @app.route("/homepage", methods=['GET','POST'])
 def homepage():
+    
     if 'username' in session:
         if request.method == 'POST':
             target = os.path.join(APP_ROOT, "static")
@@ -114,8 +136,10 @@ def homepage():
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/getvideos', methods=['GET', 'POST'])
 def getvideos():
+
     username = request.get_json()
     username = username['username']
     cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format(username))
@@ -129,9 +153,26 @@ def getvideos():
     print(json_data, file=sys.stderr)
     return jsonify(json_data)
 
+
 @app.route('/videos/<title>')
 def videos(title):
+
     return app.send_static_file(title)
+
+
+@app.route('/delete/<videoid>')
+def delete(videoid):
+    
+    if 'username' in session:
+        cursor.execute("DELETE FROM video WHERE VideoID={}".format(videoid))
+        cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
+        userid = cursor.fetchone()
+        cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount - \
+                    1 WHERE Username = '{}'".format(str(session['username'])))
+        conn.commit()
+        return redirect(url_for('homepage'))
+    return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')

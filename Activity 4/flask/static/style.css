@@ -6,8 +6,8 @@ box-sizing: border-box;
 outline: none;
 }
 body {
-font-family: Arial;
-background-color: #3498DB;
+font-family: Verdana;
+background-color: #FF904C;
 padding: 50px;
 }
 .login {
@@ -34,24 +34,24 @@ margin-bottom: 10px;
  
 input {
 text-align: center;
-background-color: #ECF0F1;
+background-color: #F0EEEB;
 border: 2px solid transparent;
 border-radius: 3px;
 font-size: 16px;
 font-weight: 200;
-padding: 10px 0;
+padding: 0px 0;
 width: 250px;
 transition: border .5s;
 }
  
 input:focus {
-border: 2px solid #3498DB;
+border: 2px solid #DB7F34;
 box-shadow: none;
 }
  
 .btn {
 border: 2px solid transparent;
-background: #3498DB;
+background: #FF904C;
 color: #ffffff;
 font-size: 16px;
 line-height: 25px;
