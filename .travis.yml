@@ -10,7 +10,7 @@ before_install:
 - docker-compose -f ./Activity\ 4/docker-compose.yml up -d
 
 before_script:
-- sleep 30
+- sleep 60
  
 script:
 - pytest test.py
