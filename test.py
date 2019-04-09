@@ -34,6 +34,6 @@ def Act2test():
 def test_act4():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://localhost:5000/login', data=data)
-    assert 'Welcome to RITube Video System' in r.content.decode('UTF-8')
+    assert 'RITube Video System' in r.title.decode('UTF-8')
 
 test_act4()
