@@ -7,7 +7,7 @@ services:
 
 before_install:
 - docker-compose -f ./Activity\ 4/docker-compose.yml down
-- docker-compose -f ./Activity\ 4/docker-compose.yml up -d
+- docker-compose -f ./Activity\ 4/docker-compose.yml up --build -d
 
 before_script:
 - sleep 30
