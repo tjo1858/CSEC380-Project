@@ -74,6 +74,11 @@ def login():
     conn.commit()
     return redirect(url_for('wrongpass'))
 
+@app.route("/logout", methods=['GET','POST'])
+def logout():
+    session.pop('username', None)
+    flash('You were logged out.')
+    return redirect(url_for('login'))
 
 @app.route("/wronguser", methods=['GET','POST'])
 def wronguser():
@@ -97,41 +102,44 @@ def homepage():
             link = request.form['linkupload']
             if link != '':
                 localfile = link.split('/')[-1]
+                print(localfile + link, file=sys.stderr)
+                destination = "/".join([target, localfile])
                 r = requests.get(link, stream=True)
-                with open(localfile, 'wb') as f:
-                    #shutil.copyfileobj(r.raw, f)
+                with open(destination, 'wb') as f:
                     if not localfile.endswith(".mp4"):
                         flash("Please upload a file with .mp4 extension.")
-                        return render_template('homepage.html')
+                        return render_template('homepage.html', username = session['username'])
                     destination = "/".join([target, localfile])
                     print("Storing in database . . . " + destination, file=sys.stderr)
                     shutil.copyfileobj(r.raw, f)
-                    #f.write(destination)
                     cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
                     userid = cursor.fetchone()
                     print(userid, file=sys.stderr)
-                    cursor.execute("INSERT INTO video(UserID, VideoTitle, DateUploaded) VALUES \
-                        ('{}', '{}', '{}')".format(userid[0], localfile, \
+                    cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoURL, DateUploaded) VALUES \
+                        ('{}', '{}', '{}', '{}')".format(userid[0], localfile, str(destination),\
                         datetime.datetime.now().strftime('%Y-%m-%d')))
                     cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
                         1 WHERE Username = '{}'".format(str(session['username'])))
                     conn.commit()
-            for f in request.files.getlist("file"):
-                filename = f.filename
-                if not filename.endswith(".mp4"):
-                    flash("Please upload a file with .mp4 extension.")
-                    return render_template('homepage.html')
-                destination = "/".join([target, filename])
-                print("Storing in database . . . " + destination, file=sys.stderr)
-                f.save(destination)
-                cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
-                userid = cursor.fetchone()
-                cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoURL, DateUploaded) VALUES \
-                    ('{}', '{}', '{}', '{}')".format(userid[0], filename, \
-                    str(destination), datetime.datetime.now().strftime('%Y-%m-%d')))
-                cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
-                    1 WHERE Username = '{}'".format(str(session['username'])))
-                conn.commit()
+                    return render_template('homepage.html', username = session['username'])
+            else:
+                for f in request.files.getlist("file"):
+                    filename = f.filename
+                    if not filename.endswith(".mp4"):
+                        flash("Please upload a file with .mp4 extension.")
+                        return render_template('homepage.html', username = session['username'])
+                    destination = "/".join([target, filename])
+                    print("Storing in database . . . " + destination, file=sys.stderr)
+                    f.save(destination)
+                    cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
+                    userid = cursor.fetchone()
+                    cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoURL, DateUploaded) VALUES \
+                        ('{}', '{}', '{}', '{}')".format(userid[0], filename, \
+                        str(destination), datetime.datetime.now().strftime('%Y-%m-%d')))
+                    cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
+                        1 WHERE Username = '{}'".format(str(session['username'])))
+                    conn.commit()
+                    return render_template('homepage.html', username = session['username'])
         return render_template('homepage.html', username = session['username'])
     else:
         return redirect(url_for('login'))
@@ -139,19 +147,20 @@ def homepage():
 
 @app.route('/getvideos', methods=['GET', 'POST'])
 def getvideos():
-
-    username = request.get_json()
-    username = username['username']
-    cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format(username))
-    userid = cursor.fetchone()
-    cursor.execute("SELECT * FROM video WHERE UserID={}".format(userid[0]))
-    rows = cursor.fetchall()
-    row_headers=[x[0] for x in cursor.description]
-    json_data=[]
-    for result in rows:
-        json_data.append(dict(zip(row_headers,result)))
-    print(json_data, file=sys.stderr)
-    return jsonify(json_data)
+    if 'username' in session:
+        username = request.get_json()
+        username = username['username']
+        print("username is " + str(username), file=sys.stderr)
+        cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format(username))
+        userid = cursor.fetchone()
+        cursor.execute("SELECT * FROM video WHERE UserID={}".format(userid[0]))
+        rows = cursor.fetchall()
+        row_headers=[x[0] for x in cursor.description]
+        json_data=[]
+        for result in rows:
+            json_data.append(dict(zip(row_headers,result)))
+        print(json_data, file=sys.stderr)
+        return jsonify(json_data)
 
 
 @app.route('/videos/<title>')
@@ -162,14 +171,19 @@ def videos(title):
 
 @app.route('/delete/<videoid>')
 def delete(videoid):
-    
+    print(videoid, file=sys.stderr)
     if 'username' in session:
+        cursor.execute("SELECT VideoTitle FROM video WHERE VideoID={}".format(videoid))
+        tempFile = cursor.fetchone()
+        print(tempFile, file=sys.stderr)
+        tempFile = tempFile[0]
         cursor.execute("DELETE FROM video WHERE VideoID={}".format(videoid))
         cursor.execute("SELECT UserID FROM users WHERE Username='{}'".format((session['username'])))
         userid = cursor.fetchone()
         cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount - \
                     1 WHERE Username = '{}'".format(str(session['username'])))
         conn.commit()
+        os.remove("static/"+tempFile)
         return redirect(url_for('homepage'))
     return redirect(url_for('login'))
 

@@ -12,10 +12,11 @@ table, th, td {
 
 <title>RITube Video System</title>
 <h1>Welcome to RITube Video System {{ username }}</h1>
+<button><a href="/logout" style="float: right;">LOGOUT</a></button>
     <form method=post enctype=multipart/form-data>
 	    <p>Upload from Computer or Upload from Link</p>
-	    Upload from Computer:  <input type=file name=file background-color: #><br>
-	    Upload from Link:  <input type="text" name="linkupload"><br>
+	    Upload from Computer:  <input type=file name=file><br>
+	    Upload from Link:      <input type="text" name="linkupload"><br>
 	    <input type=submit value=Upload>
 
 <div id="videos"></div>
