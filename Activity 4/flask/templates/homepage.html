@@ -20,7 +20,7 @@ table, th, td {
 	    <input type=submit value=Upload>
 
 <div id="videos"></div>
-
+<div id="othervids"></div>
 
 </head>
 
@@ -47,6 +47,33 @@ $(document).ready(function(){
 		html += '</ul>'
 		$("#videos").append(html);
 		
+        },
+        error: function(error){
+            console.log("Here is the error res: " + JSON.stringify(error));
+        }
+    });
+});
+</script>
+<script type=text/javascript>
+$(document).ready(function(){
+    var html = '<wl>Check out some great videos from our other users!<wl><br>';
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:5000/getothervids",
+        contentType: "application/json",
+        dataType: 'json',
+        data: JSON.stringify({username: "{{ username }}"}),
+        success: function(data) {
+                console.log(data);
+                for (i=0; i<data.length; i++) {
+                        console.log(data[i]);
+
+			html += '<a href="/videos/'+data[i]['VideoTitle']+'">' + data[i]['VideoTitle'] + ' by ' + data[i]['VideoUser'] + '</a><br>'
+			//html += '<video width="320" height="240" controls><source src="/videos/'+data[i]['VideoTitle']+'" type="video/mp4"></video><br>'
+                }
+                html += '</wl>'
+                $("#othervids").append(html);
+
         },
         error: function(error){
             console.log("Here is the error res: " + JSON.stringify(error));
