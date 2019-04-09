@@ -30,5 +30,10 @@ def Act2test():
     assert s.title.string == 'Hello World!'
     print(s.title.string)
     assert 'Hello World!' in r.text
+    
+def test_act4():
+    data = {'username': 'admin', 'password': 'admin'}
+    r = requests.post('http://localhost:5000/login', data=data)
+    assert 'Welcome to RITube Video System' in r.content.decode('UTF-8')
 
-test_act3()
+test_act4()
