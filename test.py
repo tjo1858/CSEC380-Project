@@ -35,5 +35,7 @@ def test_act4():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://localhost:5000/login', data=data)
     assert 'RITube Video System' in r.text
-
+    t = requests.post("http://localhost:5000/homepage", {"file": "Activity\ 4/SampleVideo_1280x720_2mb.mp4"})
+    assert 'SampleVideo_1280x720_2mb.mp4' in t.text
+    
 test_act4()
