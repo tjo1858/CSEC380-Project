@@ -34,10 +34,10 @@ def Act2test():
 def test_act4():
     session = requests.session()
     data = {'username': 'admin', 'password': 'admin'}
-    r = session.post('http://localhost:5000/login', data=data)
+    r = session.post('http://127.0.0.1:5000/login', data=data)
     assert 'RITube Video System' in r.text
-    t = session.post("http://localhost:5000/homepage", files={"file": open("Activity 4/SampleVideo_1280x720_1mb.mp4", "rb")})
+    t = session.post("http://127.0.0.1:5000/homepage", files={"file": open("Activity 4/SampleVideo_1280x720_1mb.mp4", "rb")})
     print(t.text)
-    assert session.get("http://localhost:5000/videos/SampleVideo_1280x720_1mb.mp4").status_code == 200
+    assert session.get("http://127.0.0.1:5000/videos/SampleVideo_1280x720_1mb.mp4").status_code == 200
     
 test_act4()
