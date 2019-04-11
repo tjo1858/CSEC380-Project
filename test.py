@@ -32,12 +32,18 @@ def Act2test():
     assert 'Hello World!' in r.text
     
 def test_act4():
+    
     session = requests.session()
+    
     data = {'username': 'admin', 'password': 'admin'}
     r = session.post('http://localhost:5000/login', data=data)
     assert 'RITube Video System' in r.text
+    
+    # upload the video from the homepage, check it is stored on the server
     t = session.post("http://localhost:5000/homepage", files={"file": open("Activity 4/SampleVideo_1280x720_1mb.mp4", "rb")})
     assert session.get("http://localhost:5000/videos/SampleVideo_1280x720_1mb.mp4").status_code == 200
+    
+    # delete the video, check it is no longer accessible
     v = session.get("http://localhost:5000/delete/1")
     assert session.get("http://localhost:5000/videos/SampleVideo_1280x720_1mb.mp4") != 200
     
