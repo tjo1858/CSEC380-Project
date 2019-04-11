@@ -12,6 +12,7 @@ import datetime
 import sys
 import os
 from flask_cors import CORS, cross_origin
+import MySQLdb
 
 time.sleep(15)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +21,7 @@ app = Flask(__name__, static_url_path='/static', template_folder='templates')
 
 # sql connect
 
-conn = pymysql.connect('mysql', 'root', 'root', 'db')
+conn = MySQLdb.connect(host='mysql', user='root', passwd='root', db='db')
 cursor = conn.cursor()
 
 # rate limit for password brute force
@@ -67,7 +68,7 @@ def home():
 @limiter.limit("14400/day;600/hour;10/minute")
 def login():
     
-    conn = pymysql.connect('mysql', 'root', 'root', 'db')
+    conn = MySQLdb.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     if request.method == 'GET':
         return redirect('http://localhost:5000')
@@ -76,12 +77,14 @@ def login():
     hashedpass = generate_password_hash(password)
     cursor.execute("SELECT EncryptedPass FROM users WHERE Username="+"'"+str(username)+"'")
     userpass = cursor.fetchone()
+    cursor.execute("SELECT Username FROM users WHERE Username="+"'"+str(username)+"'")
+    username = cursor.fetchone()
     cursor.close()
     conn.close()
     if userpass == None:
         return render_template('wronguser.html')
     elif check_password_hash(userpass[0], password):
-        session['username'] = username
+        session['username'] = username[0]
         return redirect(url_for('homepage'))
     return redirect(url_for('wrongpass'))
 
@@ -105,7 +108,7 @@ def wrongpass():
 
 @app.route("/homepage", methods=['GET','POST'])
 def homepage():
-    conn = pymysql.connect('mysql', 'root', 'root', 'db')
+    conn = MySQLdb.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     if 'username' in session:
         if request.method == 'POST':
@@ -168,7 +171,7 @@ def homepage():
 @app.route('/getvideos', methods=['GET', 'POST'])
 def getvideos():
 
-    conn = pymysql.connect('mysql', 'root', 'root', 'db')
+    conn = MySQLdb.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     if 'username' in session:
         username = request.get_json()
@@ -193,7 +196,7 @@ def getvideos():
 @app.route('/getothervids', methods=['GET', 'POST'])
 def getothervids():
 
-    conn = pymysql.connect('mysql', 'root', 'root', 'db')
+    conn = MySQLdb.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     if 'username' in session:
         
@@ -223,7 +226,7 @@ def videos(title):
 
 @app.route('/delete/<videoid>')
 def delete(videoid):
-    conn = pymysql.connect('mysql', 'root', 'root', 'db')
+    conn = MySQLdb.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     print(videoid, file=sys.stderr)
     cursor.execute("SELECT VideoUser FROM video WHERE VideoID={}".format(videoid))

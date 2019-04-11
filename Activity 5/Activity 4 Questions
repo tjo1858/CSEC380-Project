@@ -1,0 +1,3 @@
+•	How do you prevent XSS is this step when displaying the username of the user who uploaded the video?
+•	How do you ensure that users can’t delete videos that aren’t their own?
+    Users cannot delete videos uploaded by other people since we check for the current session username and compare it against the username of the person that uploaded the original video. By ensuring that videos can only be deleted when the two usernames match, we can successfully mitigate the problem of users deleting other peoples' videos.
