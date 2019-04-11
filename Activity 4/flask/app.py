@@ -3,6 +3,7 @@ import pymysql
 import requests
 import shutil
 import json
+import time
 from werkzeug import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_limiter import Limiter
@@ -12,6 +13,7 @@ import sys
 import os
 from flask_cors import CORS, cross_origin
 
+time.sleep(30)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, static_url_path='/static', template_folder='templates')
