@@ -13,7 +13,7 @@ import sys
 import os
 from flask_cors import CORS, cross_origin
 
-time.sleep(30)
+time.sleep(15)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, static_url_path='/static', template_folder='templates')
@@ -105,7 +105,6 @@ def wrongpass():
 
 @app.route("/homepage", methods=['GET','POST'])
 def homepage():
-
     conn = pymysql.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     if 'username' in session:
@@ -224,11 +223,16 @@ def videos(title):
 
 @app.route('/delete/<videoid>')
 def delete(videoid):
-
     conn = pymysql.connect('mysql', 'root', 'root', 'db')
     cursor = conn.cursor()
     print(videoid, file=sys.stderr)
+    cursor.execute("SELECT VideoUser FROM video WHERE VideoID={}".format(videoid))
+    tempVideoUser = cursor.fetchone()[0]
     if 'username' in session:
+        if session['username'] != tempVideoUser:
+            cursor.close()
+            conn.close()
+            return redirect(url_for('homepage'))
         cursor.execute("SELECT VideoTitle FROM video WHERE VideoID={}".format(videoid))
         tempFile = cursor.fetchone()
         tempFile = tempFile[0]
