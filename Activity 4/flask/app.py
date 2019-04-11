@@ -110,8 +110,8 @@ def homepage():
         if request.method == 'POST':
             target = os.path.join(APP_ROOT, "static")
 
-            link = request.form['linkupload']
-            if link != '':
+            link = request.form.get('linkupload', None)
+            if link != "" and link is not None:
                 localfile = link.split('/')[-1]
                 print(localfile + link, file=sys.stderr)
                 destination = "/".join([target, localfile])

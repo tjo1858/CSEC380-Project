@@ -6,7 +6,7 @@ import cgi
 
 
 
-def test_act3():
+def Act3test():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://localhost:5000/login', data=data)
     print ('TEST1 - correct login : admin:admin')
@@ -32,10 +32,12 @@ def Act2test():
     assert 'Hello World!' in r.text
     
 def test_act4():
+    session = requests.session()
     data = {'username': 'admin', 'password': 'admin'}
-    r = requests.post('http://localhost:5000/login', data=data)
+    r = session.post('http://localhost:5000/login', data=data)
     assert 'RITube Video System' in r.text
-    t = requests.post("http://localhost:5000/homepage", {"file": "Activity\ 4/SampleVideo_1280x720_2mb.mp4"})
-    assert 'SampleVideo_1280x720_2mb.mp4' in t.text
+    t = session.post("http://localhost:5000/homepage", files={"file": open("Activity 4/SampleVideo_1280x720_1mb.mp4", "rb")})
+    print(t.text)
+    assert session.get("http://localhost:5000/videos/SampleVideo_1280x720_1mb.mp4").status_code == 200
     
 test_act4()
