@@ -37,7 +37,9 @@ def test_act4():
     r = session.post('http://127.0.0.1:5000/login', data=data)
     assert 'RITube Video System' in r.text
     t = session.post("http://127.0.0.1:5000/homepage", files={"file": open("Activity 4/SampleVideo_1280x720_1mb.mp4", "rb")})
-    print(t.text)
     assert session.get("http://127.0.0.1:5000/videos/SampleVideo_1280x720_1mb.mp4").status_code == 200
+    v = session.get("http://127.0.0.1:5000/delete/1")
+    assert v.status_code == 200
+    assert session.get("http://127.0.0.1:5000/videos/SampleVideo_1280x720_1mb.mp4") != 200
     
 test_act4()
