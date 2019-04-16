@@ -13,7 +13,7 @@ import sys
 import os
 from flask_cors import CORS, cross_origin
 
-time.sleep(15)
+time.sleep(25)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, static_url_path='/static', template_folder='templates')
@@ -128,8 +128,8 @@ def homepage():
                     userid = cursor.fetchone()
                     print(userid, file=sys.stderr)
                     cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoUser, VideoURL, DateUploaded) VALUES \
-                        ('{}', '{}', '{}', '{}', '{}')".format(userid[0], localfile, str(destination),\
-                        session['username'], datetime.datetime.now().strftime('%Y-%m-%d')))
+                        ('{}', '{}', '{}', '{}', '{}')".format(userid[0], localfile, \
+                        session['username'], str(destination), datetime.datetime.now().strftime('%Y-%m-%d')))
                     cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
                         1 WHERE Username = '{}'".format(str(session['username'])))
                     conn.commit()
