@@ -1,3 +1,4 @@
 •	How do you prevent XSS is this step when displaying the username of the user who uploaded the video?
+    We do a check of the session ID of the user logged in and if the user ID is not the same as the ID that uploaded the video, then the database pulls the name of the user that did upload the video and displays it. There's no opportunity to use XSS to change the name, since it's already in the database.
 •	How do you ensure that users can’t delete videos that aren’t their own?
     Users cannot delete videos uploaded by other people since we check for the current session username and compare it against the username of the person that uploaded the original video. By ensuring that videos can only be deleted when the two usernames match, we can successfully mitigate the problem of users deleting other peoples' videos.
