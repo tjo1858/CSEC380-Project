@@ -1,2 +1,4 @@
 •	How would you fix your code so that these issues were no longer present?
+  Go back to using the pymysql module instead of the MySQLdb module. The pymysql module doesn't allow the user to execute multiple lines of sql in the cursor.execute() call, thereby mitigating the ability to inject multiple lines of sql code.
 •	What are the limitations, if any that, of the SQL Injection issues you’ve included? 
+  Blind sq1 injection was tough to exploit because none of our sql select statements show any output to the user.
