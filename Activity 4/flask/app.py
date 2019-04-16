@@ -62,7 +62,6 @@ conn.close()
 def home():
     return render_template('login.html')
 
-
 @app.route("/login", methods=['GET','POST'])
 @limiter.limit("14400/day;600/hour;10/minute")
 def login():
@@ -129,7 +128,7 @@ def homepage():
                     print(userid, file=sys.stderr)
                     cursor.execute("INSERT INTO video(UserID, VideoTitle, VideoUser, VideoURL, DateUploaded) VALUES \
                         ('{}', '{}', '{}', '{}', '{}')".format(userid[0], localfile, \
-                        session['username'], str(destination), datetime.datetime.now().strftime('%Y-%m-%d')))
+                        str(destination), session['username'], datetime.datetime.now().strftime('%Y-%m-%d')))
                     cursor.execute("UPDATE users SET TotalVideoCount = TotalVideoCount + \
                         1 WHERE Username = '{}'".format(str(session['username'])))
                     conn.commit()
@@ -162,7 +161,7 @@ def homepage():
     else:
         cursor.close()
         conn.close()
-        return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 @app.route('/getvideos', methods=['GET', 'POST'])
