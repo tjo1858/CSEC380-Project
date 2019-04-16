@@ -46,5 +46,3 @@ def test_act4():
     # delete the video, check it is no longer accessible
     v = session.get("http://localhost:5000/delete/1")
     assert session.get("http://localhost:5000/videos/SampleVideo_1280x720_1mb.mp4") != 200
-    
-test_act4()
