@@ -247,8 +247,8 @@ def delete(videoid):
         if tempFile == '':
             return redirect(url_for('homepage'))
         cursor.execute("SELECT VideoUser FROM video WHERE VideoID={}".format(videoid))
-        tempVideoUser = cursor.fetchone()
-        if 'username' != 'tempVideoUser':
+        tempVideoUser = cursor.fetchone()[0]
+        if session['username'] != tempVideoUser:
             flash('Cannot delete video uploaded by someone else')
             conn.commit()
             cursor.close()
