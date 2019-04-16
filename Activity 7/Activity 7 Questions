@@ -1,1 +1,2 @@
 •	How would you fix your code so that this issue is no longer present?
+  Don't use os.system calls liberally, only use specific os calls like os.remove for file deletion. Also include some kind of input sanitizaiton process to prevent users from escaping input fields and modifying/injecting code. 
