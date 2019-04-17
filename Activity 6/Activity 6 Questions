@@ -1,3 +1,4 @@
 •	How would you fix your code so that this issue is no longer present?
+  One possible way to fix this vulnerability is to check the type of file being uploaded. Since this is a video sharing platform, we could parse the URL to see whether it ends with .mp4 or other video file formats and disregard other links. This way, we can possibly ensure that an attacker will not be able to perform SSRF.
 •	How does your test demonstrate SSRF as opposed to just accessing any old endpoint.
- 
+  The demonstration video shows that the URL we entered into our link upload results with a 200 code. This proves that the request was made by the server itself and not any other endpoint.
