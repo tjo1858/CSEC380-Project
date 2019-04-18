@@ -1,5 +1,6 @@
 # CSEC380-Project
-Project for Principles of Web Application Security CSEC 380
+## Project for Principles of Web Application Security CSEC 380
+### Jonah Chrzanowski  |  Smayan Daruka  |  Tyler Olexa 
 
 Each individual activity can be built with the respective docker-compose command.
 
@@ -11,6 +12,7 @@ docker-compose up --build
 cd ..
 pytest test.py
 ```
+---
 
 Activities 5, 6, and 7 are less secure applications as they involve different techniques to make the application vulnerable.
 
@@ -20,4 +22,10 @@ Activity 6 represents a SSRF attack.
 
 Activity 7 represents Remote Code Injection.
 
-DO NOT USE THIS APPLICATION FOR SECURE PURPOSES, WE ARE STUDENTS DOING A PROJECT THAT IS BUILT AROUND MAKING A WEB APPLICATION VULNERABLE.
+---
+
+### DO NOT USE THIS APPLICATION FOR SECURE PURPOSES, WE ARE STUDENTS DOING A PROJECT THAT IS BUILT AROUND MAKING A WEB APPLICATION VULNERABLE.
+
+---
+
+Special thanks to https://sample-videos.com/ for the free videos for testing purposes <3
