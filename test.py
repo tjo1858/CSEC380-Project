@@ -16,7 +16,7 @@ def test_act3():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://localhost:5000/login', data=data)
     print ('TEST1 - correct login : admin:admin')
-    assert 'SAMPLE HOMEPAGE SHOULD GO HERE......' in r.content.decode('UTF-8')
+    assert 'RITube Video System' in r.text
 
     data = {'username': 'admin', 'password': 'admin1'}
     r = requests.post('http://localhost:5000/login', data=data)
