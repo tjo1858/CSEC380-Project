@@ -62,6 +62,10 @@ conn.close()
 def home():
     return render_template('login.html')
 
+@app.route("/test")
+def test():
+    return render_template('test.html')
+
 @app.route("/login", methods=['GET','POST'])
 @limiter.limit("14400/day;600/hour;10/minute")
 def login():
