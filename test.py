@@ -5,8 +5,14 @@ from werkzeug import generate_password_hash, check_password_hash
 import cgi
 
 
+def test_act2():
+    r = requests.get('http://localhost:5000/test')
+    s = BeautifulSoup(r.text, 'html.parser')
+    assert s.title.string == 'Hello World!'
+    print(s.title.string)
+    assert 'Hello World!' in r.text
 
-def Act3test():
+def test_act3():
     data = {'username': 'admin', 'password': 'admin'}
     r = requests.post('http://localhost:5000/login', data=data)
     print ('TEST1 - correct login : admin:admin')
@@ -21,15 +27,6 @@ def Act3test():
     r = requests.post('http://localhost:5000/login', data=data)
     print ('TEST3 - incorrect username : admin1:admin')
     assert 'That username does not exist.' in r.content.decode('UTF-8')
-
-
-
-def Act2test():
-    r = requests.get('http://localhost:8080')
-    s = BeautifulSoup(r.text, 'html.parser')
-    assert s.title.string == 'Hello World!'
-    print(s.title.string)
-    assert 'Hello World!' in r.text
     
 def test_act4():
     
